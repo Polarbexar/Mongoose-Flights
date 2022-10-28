@@ -1,0 +1,79 @@
+<%- include('../partials/header') %>
+
+<section id="show-page">
+  <div>Airline: </div>
+  <div><%= flight.airport %></div>
+  <div>Airport: </div>
+  <div><%= flight.airline %></div>
+  <div>Flight Number: </div>
+  <div><%= flight.flightNo %></div>
+  <div>Departs: </div>
+  <div><%= flight.departs %></div>
+</section>
+
+<form action="/flights/<%= flight._id %>/tickets" method="POST">
+  <input type="text" placeholder="seat" name="seat" pattern="[A-F][1-9]\d?" required>
+  <input type="number" placeholder="price" name="price" min="0" required>
+  <button type="submit">Add Ticket to Flight</button>
+</form>
+
+<h2>Add Destination</h2>
+<form action="/flights/<%= flight._id %>/destinations" method="POST">
+    <label>Airport</label>
+    <select name="airport">
+        <option value="AUS">AUS</option>
+        <option value="DFW">DFW</option>
+        <option value="DEN">DEN</option>
+        <option value="LAX">LAX</option>
+        <option value="SAN">SAN</option>
+    </select>
+    <label>Arrival</label>
+    <input type="datetime-local" name="arrival">
+    <input type="submit" value="Add Destination">
+</form>
+
+<% if (flight.destination.length) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Airport</th>
+        <th>Arrival Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% flight.destination.forEach(function(f) { %>
+        <tr>
+          <td><%= f.airport %></td>
+          <td><%= f.arrival %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <% } else { %>
+    <h5>No Destinations Yet!</h5>
+    <% } %>
+    
+    <% if (tickets.length) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Seat</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% tickets.forEach(function(t) { %>
+            <tr>
+              <td><%= t.seat %></td>
+              <td><%= t.price %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+    <h5>No Tickets Yet!</h5>
+    <% } %>
+    <a href="/flights/<%= flight._id%>/tickets/new"><button>New Ticket</button></a>
+
+
+<%- include('../partials/footer') %>
